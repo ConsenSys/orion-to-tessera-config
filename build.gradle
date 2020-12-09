@@ -1,0 +1,71 @@
+plugins {
+    id "java-library"
+    id "application"
+    id "org.javamodularity.moduleplugin" version "1.7.0"
+}
+
+group "net.consensys.tessera"
+version "1.0-SNAPSHOT"
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+application {
+    applicationName = "migrate"
+    mainClass = "net.consensys.tessera.migration.Main"
+    mainModule = "orion.to.tessera.config"
+    applicationDefaultJvmArgs = []
+    startScripts.enabled = true
+}
+task allDeps(type: DependencyReportTask) {}
+
+configurations.all {
+    exclude group: "javax.json"
+}
+
+
+dependencies {
+
+    api "org.slf4j:slf4j-api:1.7.30"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    runtimeOnly "ch.qos.logback:logback-core:1.2.3"
+    implementation "org.glassfish:jakarta.el:3.0.3"
+
+    implementation "com.moandjiezana.toml:toml4j:0.7.2"
+    api "jakarta.validation:jakarta.validation-api:2.0.2"
+    implementation "org.hibernate.validator:hibernate-validator:6.1.6.Final"
+    implementation("net.consensys.quorum.tessera:config:20.10.0") {
+        transitive = false
+    }
+    implementation("net.consensys.quorum.tessera:shared:20.10.0") {
+        transitive = false
+    }
+
+    implementation "org.eclipse.persistence:org.eclipse.persistence.moxy:2.7.7"
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.3"
+    implementation "info.picocli:picocli:4.0.4"
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.3"
+    implementation "org.apache.commons:commons-lang3:3.7"
+
+    api "jakarta.validation:jakarta.validation-api:2.0.2"
+    implementation "org.hibernate.validator:hibernate-validator:6.1.6.Final"
+
+    testImplementation "junit:junit:4.13"
+
+    testImplementation "org.assertj:assertj-core:3.18.0"
+    testImplementation "org.mockito:mockito-inline:3.4.4"
+}
+
+test {
+    systemProperty("javax.xml.bind.JAXBContextFactory", "org.eclipse.persistence.jaxb.JAXBContextFactory")
+    systemProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory")
+
+
+
+}
+
+modularity.disableEffectiveArgumentsAdjustment()
+
